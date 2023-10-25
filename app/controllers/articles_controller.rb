@@ -1,7 +1,4 @@
-require 'text'
-
 class ArticlesController < ApplicationController
-  before_action :authenticate_user!, only: [:index, :search]
   before_action :ensure_admin, only: [:analytics]
 
   def home
@@ -34,8 +31,10 @@ class ArticlesController < ApplicationController
   end
 
   def analytics
+    @users = User.all
     @search_queries = SearchQuery.includes(:user).order(created_at: :desc)
-  end    
+    @most_searched_queries = SearchQuery.group(:query).order('count_id DESC').limit(10).count(:id)
+  end
 
   private
 
@@ -44,17 +43,32 @@ class ArticlesController < ApplicationController
   end
 
   def save_search_query(user, new_query)
-    last_query = SearchQuery.where(user_id: user.id).order(created_at: :desc).first
+    new_query = new_query.strip
+    return if new_query.strip.empty?
 
-    if last_query && similar?(new_query, last_query.query)
-      last_query.update(query: new_query)
+    # Gets the most recent search query record for the current user
+    last_query_record = SearchQuery.where(user_id: user.id).order(created_at: :desc).first
+    
+    # If there is a previous record
+    if last_query_record
+      # Calculates the time difference between now and the last query's creation time
+      time_difference = Time.current - last_query_record.created_at
+  
+      # Checks if the time difference is less than 5 seconds
+      if time_difference < 5.seconds
+        # If the new query is longer than the last one, updates the last record
+        if new_query.length > last_query_record.query.length
+          last_query_record.update(query: new_query, created_at: Time.current)
+        end
+        # If it's shorter or the same length, the code doesn't saves or updates anything
+      else
+        # If more than 5 seconds passed since the last query, creates a new record with a new session ID
+        SearchQuery.create(user_id: user.id, query: new_query, session_id: SecureRandom.uuid)
+      end
     else
-      SearchQuery.create(user_id: user.id, query: new_query)
+      # If there's no previous record for this user, creates a new record with a new session ID
+      SearchQuery.create(user_id: user.id, query: new_query, session_id: SecureRandom.uuid)
     end
-  end
-
-  def similar?(str1, str2)
-    Text::Levenshtein.distance(str1, str2) <= 2
   end
 
   def ensure_admin

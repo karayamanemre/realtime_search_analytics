@@ -1,27 +1,29 @@
-<h1>Search for Articles</h1>
-
-<input type="text" id="search-box" placeholder="Search..." />
-<div id="search-results">
-  <% @articles.each do |article| %>
-    <div>
-      <h2><%= article.title %></h2>
-      <p><%= article.content %></p>
-    </div>
+<div class="max-w-md mx-auto p-4">
+  <h1 class="text-2xl font-semibold mb-4">Search for Articles</h1>
+  <% if user_signed_in? && current_user.admin? %>
+    <%= link_to 'View Search Analytics', analytics_articles_path, class: "text-blue-500 hover:underline block my-4" %>
   <% end %>
+
+  <input type="text" id="search-box" placeholder="Search..." class="w-full border border-gray-300 rounded-md p-2 mb-4" />
+
+  <div id="search-results">
+    <% @articles.each do |article| %>
+      <div class="mb-4 border-b py-4 px-2 bg-white rounded-md shadow-lg">
+        <h2 class="text-lg font-semibold mb-2"><%= article.title %></h2>
+        <p class="text-gray-600"><%= article.content %></p>
+      </div>
+    <% end %>
+  </div>
 </div>
-<% if user_signed_in? && current_user.admin? %>
-  <%= link_to 'View Search Analytics', analytics_articles_path %>
-<% end %>
 
 <script type="module">
-
   let debounceTimeout;
 
-  document.getElementById('search-box').addEventListener('keyup', function() {
+  document.getElementById('search-box').addEventListener('keyup', function () {
     clearTimeout(debounceTimeout);
-    document.getElementById('search-results').innerHTML = '';  // Clear previous results
+    document.getElementById('search-results').innerHTML = ''; // Clear previous results
     debounceTimeout = setTimeout(sendSearchRequest, 300); // 300ms delay
-});
+  });
 
   function sendSearchRequest() {
     const query = document.getElementById('search-box').value;
@@ -34,25 +36,26 @@
       },
       body: JSON.stringify({ query: query })
     })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
-    })
-    .then(data => {
-      const resultsDiv = document.getElementById('search-results');
-      let resultsHTML = '';
-      data.articles.forEach(article => {
-        resultsHTML += `<div><h2>${article.title}</h2><p>${article.content}</p></div>`;
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const resultsDiv = document.getElementById('search-results');
+        let resultsHTML = '';
+        data.articles.forEach((article) => {
+          resultsHTML += `<div class="mb-4">
+            <h2 class="text-lg font-semibold">${article.title}</h2>
+            <p class="text-gray-600">${article.content}</p>
+          </div>`;
+        });
+        resultsDiv.innerHTML = resultsHTML;
+      })
+      .catch((error) => {
+        console.log('There was a problem with the fetch operation:', error.message);
+        alert('There was an issue fetching the search results. Please try again later.');
       });
-      resultsDiv.innerHTML = resultsHTML;
-    })
-    .catch(error => {
-      console.log("There was a problem with the fetch operation:", error.message);
-      alert("Please log in to use the search feature.");
-      window.location.href = "/users/sign_in";
-    });
   }
-
 </script>

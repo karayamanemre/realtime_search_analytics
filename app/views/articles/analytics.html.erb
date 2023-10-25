@@ -1,20 +1,22 @@
-<h1>Search Analytics</h1>
+<div class="max-w-xl mx-auto p-4">
+  <h1 class="text-2xl font-semibold mb-4">Search Analytics</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>User Email</th>
-      <th>Search Query</th>
-      <th>Timestamp</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @search_queries.each do |search_query| %>
-      <tr>
-        <td><%= search_query.user.email %></td>
-        <td><%= search_query.query %></td>
-        <td><%= search_query.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
+  <h2 class="text-xl font-semibold mb-4">Top Most Searched Queries</h2>
+
+  <table class="w-full border-collapse border border-gray-300">
+    <thead>
+      <tr class="bg-gray-200">
+        <th class="border border-gray-300 px-4 py-2">Search Query</th>
+        <th class="border border-gray-300 px-4 py-2">Count</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @most_searched_queries.each do |query, count| %>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2"><%= query %></td>
+          <td class="border border-gray-300 px-4 py-2"><%= count %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

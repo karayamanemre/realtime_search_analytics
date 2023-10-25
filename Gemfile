@@ -5,8 +5,6 @@ ruby "3.0.0"
 
 gem 'devise'
 
-gem 'text'
-
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.8"
 
@@ -66,6 +64,7 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+  gem 'bullet'
 end
 
 group :test do
@@ -74,3 +73,8 @@ group :test do
   gem "selenium-webdriver"
 
 end
+
+gem "tailwindcss-rails", "~> 2.0"
+
+gem "font-awesome-sass", "~> 6.4.2"
+

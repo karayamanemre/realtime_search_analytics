@@ -10,5 +10,10 @@ Rails.application.routes.draw do
     end
   end
   
+  resources :users, only: [] do
+    member do
+      get 'search_queries'
+    end
+  end
 
 end
