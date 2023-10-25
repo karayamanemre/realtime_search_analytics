@@ -5,6 +5,8 @@ ruby "3.0.0"
 
 gem 'devise'
 
+gem 'text'
+
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.8"
 

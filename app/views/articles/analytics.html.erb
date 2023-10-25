@@ -1,0 +1,20 @@
+<h1>Search Analytics</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>User Email</th>
+      <th>Search Query</th>
+      <th>Timestamp</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @search_queries.each do |search_query| %>
+      <tr>
+        <td><%= search_query.user.email %></td>
+        <td><%= search_query.query %></td>
+        <td><%= search_query.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

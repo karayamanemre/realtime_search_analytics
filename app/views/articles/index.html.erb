@@ -1,0 +1,58 @@
+<h1>Search for Articles</h1>
+
+<input type="text" id="search-box" placeholder="Search..." />
+<div id="search-results">
+  <% @articles.each do |article| %>
+    <div>
+      <h2><%= article.title %></h2>
+      <p><%= article.content %></p>
+    </div>
+  <% end %>
+</div>
+<% if user_signed_in? && current_user.admin? %>
+  <%= link_to 'View Search Analytics', analytics_articles_path %>
+<% end %>
+
+<script type="module">
+
+  let debounceTimeout;
+
+  document.getElementById('search-box').addEventListener('keyup', function() {
+    clearTimeout(debounceTimeout);
+    document.getElementById('search-results').innerHTML = '';  // Clear previous results
+    debounceTimeout = setTimeout(sendSearchRequest, 300); // 300ms delay
+});
+
+  function sendSearchRequest() {
+    const query = document.getElementById('search-box').value;
+
+    fetch('/articles/search', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content
+      },
+      body: JSON.stringify({ query: query })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then(data => {
+      const resultsDiv = document.getElementById('search-results');
+      let resultsHTML = '';
+      data.articles.forEach(article => {
+        resultsHTML += `<div><h2>${article.title}</h2><p>${article.content}</p></div>`;
+      });
+      resultsDiv.innerHTML = resultsHTML;
+    })
+    .catch(error => {
+      console.log("There was a problem with the fetch operation:", error.message);
+      alert("Please log in to use the search feature.");
+      window.location.href = "/users/sign_in";
+    });
+  }
+
+</script>
