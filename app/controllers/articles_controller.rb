@@ -24,8 +24,10 @@ class ArticlesController < ApplicationController
         content: article.content
       }
     end
+
+    most_relevant_search = articles.map { |a| a[:title] }.sort_by(&:length).last || query
   
-    save_search_query(user, query)
+    save_search_query(user, most_relevant_search)
   
     render json: { articles: articles }
   end
