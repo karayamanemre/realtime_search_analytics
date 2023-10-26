@@ -16,6 +16,6 @@ Realtime Search Analytics is a Ruby on Rails application that provides users wit
 1. **Clone the Repository**:
 
 ```bash
-git clone [repository-url]
+git clone https://github.com/karayamanemre/realtime_search_analytics.git
 cd realtime_search_analytics
 ```
