@@ -28,8 +28,8 @@
 
   document.getElementById('search-box').addEventListener('keyup', function () {
     clearTimeout(debounceTimeout);
-    document.getElementById('search-results').innerHTML = ''; // Clear previous results
-    debounceTimeout = setTimeout(sendSearchRequest, 300); // 300ms delay
+    document.getElementById('search-results').innerHTML = '';
+    debounceTimeout = setTimeout(sendSearchRequest, 500);
   });
 
   function sendSearchRequest() {
