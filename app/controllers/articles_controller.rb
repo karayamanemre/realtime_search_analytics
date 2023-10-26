@@ -34,6 +34,16 @@ class ArticlesController < ApplicationController
     @users = User.all
     @search_queries = SearchQuery.includes(:user).order(created_at: :desc)
     @most_searched_queries = SearchQuery.group(:query).order('count_id DESC').limit(10).count(:id)
+    @user_search_queries = SearchQuery.where(user_id: current_user.id)
+                                     .group(:query)
+                                     .order('count_id DESC')
+                                     .limit(10)
+                                     .count(:id)
+  end
+
+  def trending_searches
+    @most_searched_queries = SearchQuery.group(:query).order('count_id DESC').limit(10).count(:id)
+    render json: { trending: @most_searched_queries.keys }
   end
 
   private

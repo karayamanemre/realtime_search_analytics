@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     collection do
       post 'search'
       get 'analytics'
+      get 'trending_searches'
     end
   end
   
