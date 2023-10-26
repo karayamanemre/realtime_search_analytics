@@ -1,24 +1,21 @@
-# README
+# Realtime Search Analytics
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Realtime Search Analytics is a Ruby on Rails application that provides users with the ability to search through a vast repository of articles and gain insights on search trends and behaviors.
 
-Things you may want to cover:
+## Features
 
-* Ruby version
+1. **User Authentication**: Users can sign in to have a personalized experience.
+2. **Search Functionality**: Allows users to search for articles. The search results provide article titles and content.
+3. **Search Analytics**:
+   - Admin users can view global analytics data, such as the most frequently searched queries and individual user search behaviors.
+   - Real-time saving and updating of search queries based on certain conditions.
+4. **Trending Searches**: An endpoint that provides the top 10 trending search queries.
 
-* System dependencies
+## Setup and Installation
 
-* Configuration
+1. **Clone the Repository**:
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```bash
+git clone [repository-url]
+cd realtime_search_analytics
+```
